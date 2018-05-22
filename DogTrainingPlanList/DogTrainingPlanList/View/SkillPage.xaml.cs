@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace DogTrainingPlanList
+namespace DogTrainingPlanList.View
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for SkillPage.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class SkillPage : Page
     {
-        public MainWindow()
+        public SkillPage()
         {
             InitializeComponent();
         }
