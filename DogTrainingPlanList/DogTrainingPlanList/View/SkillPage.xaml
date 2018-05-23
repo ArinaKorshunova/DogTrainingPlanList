@@ -4,16 +4,42 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:DogTrainingPlanList.View"
+      xmlns:viewModel="clr-namespace:DogTrainingPlanList.ViewModel"
       mc:Ignorable="d" ShowsNavigationUI="False"
       d:DesignHeight="300" d:DesignWidth="300"
       Title="SkillPage">
 
+    <Page.DataContext>
+        <viewModel:SkillPageViewModel/>
+    </Page.DataContext>
+    
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="1*"/>
-            <RowDefinition Height="5*"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <Label>Навыки</Label>
+        <Grid>
+            <Label FontSize="32">Навыки</Label>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Padding="5" Margin="10" Height="30">Редактировать список навков</Button>
+                <Button Padding="5" Margin="10" Height="30">Составить план</Button>
+            </StackPanel>
+        </Grid>
+        <DataGrid Grid.Row="1"  ItemsSource="{Binding Skills}" AutoGenerateColumns="False" CanUserAddRows="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Название" Width="10*" Binding="{Binding Name}"/>
+                <DataGridTextColumn Header="Сложность" Width="5*" Binding="{Binding Effort}"/>
+                <DataGridTemplateColumn Header="Прогресс" Width="10*">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <ProgressBar Margin="10" Height="10" Grid.Row="1" HorizontalAlignment="Stretch" Value="{Binding PercentOfCompletion}" Foreground="{Binding Color}"></ProgressBar>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <!--<ProgressBar Margin="10" Grid.Row="1" HorizontalAlignment="Stretch" Value="{Binding Value}" Foreground="{Binding Color}"></ProgressBar>-->
     </Grid>
 </Page>

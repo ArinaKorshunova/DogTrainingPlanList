@@ -14,8 +14,9 @@ namespace DogTrainingPlanList
         private void Application_Startup(object sender, StartupEventArgs e)
         {
             navigationWindow = new NavigationWindow();
-            navigationWindow.Height = 850;
-            navigationWindow.Width = 1200;
+            navigationWindow.Title = "План треннировок";
+            navigationWindow.Height = 650;
+            navigationWindow.Width = 900;
             var page = new SkillPage();
             navigationWindow.Navigate(page);
             navigationWindow.Show();
