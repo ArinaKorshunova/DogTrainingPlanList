@@ -89,6 +89,10 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Constatns.cs" />
+    <Compile Include="DataBaseLayer\DataBaseHelper.cs" />
+    <Compile Include="Model\Training.cs" />
+    <Compile Include="Model\TrainingSkills.cs" />
     <Compile Include="Model\Skill.cs" />
     <Compile Include="NavigationHelper\Navigation.cs" />
     <Compile Include="ViewModel\SkillPageViewModel.cs" />

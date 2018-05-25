@@ -1,4 +1,5 @@
-﻿using DogTrainingPlanList.View;
+﻿using DogTrainingPlanList.DataBaseLayer;
+using DogTrainingPlanList.View;
 using System.Windows;
 using System.Windows.Navigation;
 
@@ -13,6 +14,8 @@ namespace DogTrainingPlanList
 
         private void Application_Startup(object sender, StartupEventArgs e)
         {
+            DataBaseHelper.InitialCreate();
+
             navigationWindow = new NavigationWindow();
             navigationWindow.Title = "План треннировок";
             navigationWindow.Height = 650;

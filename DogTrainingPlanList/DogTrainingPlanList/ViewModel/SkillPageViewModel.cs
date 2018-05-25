@@ -1,4 +1,5 @@
-﻿using DogTrainingPlanList.Model;
+﻿using DogTrainingPlanList.DataBaseLayer;
+using DogTrainingPlanList.Model;
 using Prism.Commands;
 using System.Collections.Generic;
 using System.Windows;
@@ -47,33 +48,7 @@ namespace DogTrainingPlanList.ViewModel
 
         public SkillPageViewModel()
         {
-            Skills = new List<Skill>
-            {
-                new Skill
-                {
-                    Id = 0,
-                    Effort = 0,
-                    Name = "Наведение",
-                    PercentOfCompletion = 40,
-                    IsHide = false
-                },
-                new Skill
-                {
-                    Id = 0,
-                    Effort = 1,
-                    Name = "Змейка",
-                    PercentOfCompletion = 20,
-                    IsHide = false
-                },
-                new Skill
-                {
-                    Id = 0,
-                    Effort = 1,
-                    Name = "Назад",
-                    PercentOfCompletion = 10,
-                    IsHide = false
-                }
-            };
+            Skills = DataBaseHelper.GetSkills();
             EditSkillsCommand = new DelegateCommand(EditSkills);
             CreatePlanCommand = new DelegateCommand(CreatePlan);
         }
