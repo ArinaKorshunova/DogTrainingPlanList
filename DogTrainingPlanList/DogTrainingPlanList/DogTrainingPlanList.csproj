@@ -95,6 +95,7 @@
     <Compile Include="Model\TrainingSkills.cs" />
     <Compile Include="Model\Skill.cs" />
     <Compile Include="NavigationHelper\Navigation.cs" />
+    <Compile Include="ViewModel\EditSkillViewModel.cs" />
     <Compile Include="ViewModel\SkillPageViewModel.cs" />
     <Compile Include="View\CreatePlanPage.xaml.cs">
       <DependentUpon>CreatePlanPage.xaml</DependentUpon>
@@ -136,7 +137,12 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="img\add.png" />
+    <Resource Include="img\edit.png" />
+    <Resource Include="img\hide.png" />
+    <Resource Include="img\plan.png" />
+  </ItemGroup>
   <ItemGroup>
     <Page Include="View\CreatePlanPage.xaml">
       <SubType>Designer</SubType>

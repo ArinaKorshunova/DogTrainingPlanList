@@ -10,21 +10,24 @@ namespace DogTrainingPlanList.DataBaseLayer
     {
         public static void InitialCreate()
         {
-            if (!File.Exists(Constatns.DataBaseName))
+            bool existDataBase = File.Exists(Constatns.DataBaseName);
+            if (!existDataBase)
             {
                 SQLiteConnection.CreateFile(Constatns.DataBaseName);
+            }
 
-                SQLiteConnection m_dbConnection = new SQLiteConnection($"Data Source={Constatns.DataBaseName};Version=3;");
-                m_dbConnection.Open();
+            SQLiteConnection m_dbConnection = new SQLiteConnection($"Data Source={Constatns.DataBaseName};Version=3;");
+            m_dbConnection.Open();
 
-                string sql = $"create table {Constatns.SkillTableName} (Id integer primary key autoincrement, Name text, Effort integer, PercentOfCompletion integer, IsHide integer, Type text);";
-                sql += $"create table {Constatns.TrainingTableName} (Id integer primary key autoincrement, TrainingDate text, Duration integer, [Order] integer);";
-                sql += $"create table {Constatns.TrainingSkillsTableName} (Id integer primary key autoincrement, TrainingId integer, SkillId integer, [Order] integer, Duration integer, IsComplete integer, Value integer);";
+            string sql = $"create table if not exists {Constatns.SkillTableName} (Id integer primary key autoincrement, Name text, Effort integer, PercentOfCompletion integer, IsHide integer, Type text);";
+            sql += $"create table if not exists {Constatns.TrainingTableName} (Id integer primary key autoincrement, TrainingDate text, Duration integer, [Order] integer);";
+            sql += $"create table if not exists {Constatns.TrainingSkillsTableName} (Id integer primary key autoincrement, TrainingId integer, SkillId integer, [Order] integer, Duration integer, IsComplete integer, Value integer);";
 
-                SQLiteCommand command = new SQLiteCommand(sql, m_dbConnection);
-                command.ExecuteNonQuery();
+            SQLiteCommand command = new SQLiteCommand(sql, m_dbConnection);
+            command.ExecuteNonQuery();
 
-
+            if (!existDataBase)
+            {
                 try
                 {
                     SQLiteCommand fillSkills = new SQLiteCommand(FillSkillsTableScript(), m_dbConnection);
@@ -35,9 +38,9 @@ namespace DogTrainingPlanList.DataBaseLayer
                     Console.WriteLine(ex.InnerException != null ? ex.InnerException.Message : ex.Message);
                 }
 
-
-                m_dbConnection.Close();
             }
+
+            m_dbConnection.Close();
         }
 
         private static string FillSkillsTableScript()
@@ -84,7 +87,7 @@ namespace DogTrainingPlanList.DataBaseLayer
 
         }
 
-        public static List<Skill> GetSkills()
+        public static List<Skill> GetNotHighSkills()
         {
             List<Skill> skills = new List<Skill>();
 
@@ -92,7 +95,7 @@ namespace DogTrainingPlanList.DataBaseLayer
             {
                 con.Open();
 
-                string stm = $"SELECT * FROM {Constatns.SkillTableName}";
+                string stm = $"SELECT * FROM {Constatns.SkillTableName} where IsHide = 0";
 
                 using (SQLiteCommand cmd = new SQLiteCommand(stm, con))
                 {
@@ -117,6 +120,121 @@ namespace DogTrainingPlanList.DataBaseLayer
             }
 
             return skills;
+        }
+        public static List<Skill> GetAllSkills()
+        {
+            List<Skill> skills = new List<Skill>();
+
+            using (SQLiteConnection con = new SQLiteConnection($"Data Source={Constatns.DataBaseName};Version=3;"))
+            {
+                con.Open();
+
+                string stm = $"SELECT * FROM {Constatns.SkillTableName}";
+
+                using (SQLiteCommand cmd = new SQLiteCommand(stm, con))
+                {
+                    using (SQLiteDataReader rdr = cmd.ExecuteReader())
+                    {
+                        while (rdr.Read())
+                        {
+                            skills.Add(new Skill
+                            {
+                                Id = rdr.GetInt32(0),
+                                Name = rdr.GetString(1),
+                                Effort = rdr.GetInt32(2),
+                                PercentOfCompletion = rdr.GetInt32(3),
+                                IsHide = rdr.GetInt32(4) > 0,
+                                Type = rdr.GetString(5)
+
+                            });
+                        }
+                    }
+                }
+
+                con.Close();
+            }
+
+            return skills;
+        }
+
+        public static Skill GetSkillById(int id)
+        {
+
+            Skill skill = new Skill();
+
+            using (SQLiteConnection con = new SQLiteConnection($"Data Source={Constatns.DataBaseName};Version=3;"))
+            {
+                con.Open();
+
+                string stm = $"SELECT * FROM {Constatns.SkillTableName} where Id = {id}";
+
+                using (SQLiteCommand cmd = new SQLiteCommand(stm, con))
+                {
+                    using (SQLiteDataReader rdr = cmd.ExecuteReader())
+                    {
+                        while (rdr.Read())
+                        {
+                            skill = new Skill
+                            {
+                                Id = rdr.GetInt32(0),
+                                Name = rdr.GetString(1),
+                                Effort = rdr.GetInt32(2),
+                                PercentOfCompletion = rdr.GetInt32(3),
+                                IsHide = rdr.GetInt32(4) > 0,
+                                Type = rdr.GetString(5)
+
+                            };
+                        }
+                    }
+                }
+
+                con.Close();
+            }
+
+            return skill;
+        }
+
+        public static void EditSkill(Skill skill)
+        {
+            using (SQLiteConnection con = new SQLiteConnection($"Data Source={Constatns.DataBaseName};Version=3;"))
+            {
+                con.Open();
+
+                string stm = $"UPDATE {Constatns.SkillTableName} set Name = '{skill.Name}', Effort = {skill.Effort}, PercentOfCompletion = {skill.PercentOfCompletion}, IsHide = {(skill.IsHide ? 1 : 0)}, Type = '{skill.Type}' where Id = {skill.Id}";
+
+                SQLiteCommand cmd = new SQLiteCommand(stm, con);
+                cmd.ExecuteNonQuery();
+
+                con.Close();
+            }
+        }
+        public static void AddSkill(Skill skill)
+        {
+            using (SQLiteConnection con = new SQLiteConnection($"Data Source={Constatns.DataBaseName};Version=3;"))
+            {
+                con.Open();
+
+                string sql = $"insert into  {Constatns.SkillTableName} (Name, Effort, PercentOfCompletion, IsHide, Type) values ('{skill.Name}', {skill.Effort}, {skill.PercentOfCompletion}, {(skill.IsHide ? 1 : 0)}, '{skill.Type}')";
+                
+                SQLiteCommand cmd = new SQLiteCommand(sql, con);
+                cmd.ExecuteNonQuery();
+
+                con.Close();
+            }
+        }
+        public static void HideSkill(int id)
+        {
+            using (SQLiteConnection con = new SQLiteConnection($"Data Source={Constatns.DataBaseName};Version=3;"))
+            {
+                con.Open();
+
+                string stm = $"UPDATE {Constatns.SkillTableName} set IsHide = 1 where Id = {id}";
+
+                SQLiteCommand cmd = new SQLiteCommand(stm, con);
+                cmd.ExecuteNonQuery();
+
+                con.Close();
+            }
         }
     }
 }

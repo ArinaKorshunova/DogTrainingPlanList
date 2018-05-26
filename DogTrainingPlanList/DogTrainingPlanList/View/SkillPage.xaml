@@ -21,9 +21,14 @@
 
         <Grid>
             <Label FontSize="32">Навыки</Label>
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                <Button Padding="5" Margin="10" Height="30">Редактировать список навков</Button>
-                <Button Padding="5" Margin="10" Height="30">Составить план</Button>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
+                <CheckBox Content="Показать скрытые" IsChecked="{Binding ShowHided}" VerticalAlignment="Center" Margin="5" Command="{Binding ChangeShowHidedCommand}"></CheckBox>
+                <Button MaxHeight="30" Width="30" Background="Transparent" ToolTip="Добавить новый навык" Command="{Binding AddSkillCommand}">
+                    <Image Source="..\img\add.png"></Image>
+                </Button>
+                <Button MaxHeight="30" Width="30" Background="Transparent" ToolTip="Составить план" Command="{Binding AddSkillCommand}">
+                    <Image Source="..\img\plan.png"></Image>
+                </Button>
             </StackPanel>
         </Grid>
         <DataGrid Grid.Row="1"  ItemsSource="{Binding Skills}" AutoGenerateColumns="False" CanUserAddRows="False">
@@ -35,6 +40,24 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <ProgressBar Margin="10" Height="10" Grid.Row="1" HorizontalAlignment="Stretch" Value="{Binding PercentOfCompletion}" Foreground="{Binding Color}"></ProgressBar>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Действие" Width="auto">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <Button MaxHeight="30" Width="30" Padding="2" Margin="2" ToolTip="Редактировать навык" Background="Transparent" Command="{Binding Path=DataContext.EditSkillsCommand,       
+                                     RelativeSource= {RelativeSource FindAncestor,
+                                      AncestorType={x:Type DataGrid}}}" CommandParameter="{Binding Id}">
+                                    <Image Source="..\img\edit.png"></Image>
+                                </Button>
+                                <Button Visibility="{Binding HideButtonVisibility}" MaxHeight="30" Width="30" Padding="2" Margin="2" ToolTip="Редактировать навык" Background="Transparent" Command="{Binding Path=DataContext.HideSkillsCommand,       
+                                     RelativeSource= {RelativeSource FindAncestor,
+                                      AncestorType={x:Type DataGrid}}}" CommandParameter="{Binding Id}">
+                                    <Image Source="..\img\hide.png"></Image>
+                                </Button>
+                            </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

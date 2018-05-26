@@ -1,4 +1,5 @@
-﻿using System.Windows.Media;
+﻿using System.Windows;
+using System.Windows.Media;
 
 namespace DogTrainingPlanList.Model
 {
@@ -25,11 +26,11 @@ namespace DogTrainingPlanList.Model
                 else if (PercentOfCompletion <= 80)
                 {
 
-                    return new SolidColorBrush(Colors.Orange);
+                    return new SolidColorBrush(Colors.Gold);
                 }
                 else
                 {
-                    return new SolidColorBrush(Colors.Green);
+                    return new SolidColorBrush(Colors.YellowGreen);
                 }
             }
         }
@@ -51,6 +52,21 @@ namespace DogTrainingPlanList.Model
                 }
 
                 return "Не определен";
+            }
+        }
+
+        public Visibility HideButtonVisibility
+        {
+            get
+            {
+                if (IsHide)
+                {
+                    return Visibility.Hidden;
+                }
+                else
+                {
+                    return Visibility.Visible;
+                }
             }
         }
     }

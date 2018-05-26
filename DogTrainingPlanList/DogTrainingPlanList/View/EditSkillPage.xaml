@@ -3,12 +3,45 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:DogTrainingPlanList.View"
       mc:Ignorable="d" 
       d:DesignHeight="300" d:DesignWidth="300"
       Title="EditSkillPage">
 
-    <Grid>
-        
+    <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="20*"/>
+            <RowDefinition Height="20*"/>
+            <RowDefinition Height="20*"/>
+            <RowDefinition Height="20*"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="*" MinWidth="200"/>
+        </Grid.ColumnDefinitions>
+        <TextBlock TextWrapping="Wrap" Text="{Binding ErrorMessage}" Grid.ColumnSpan="2" Foreground="Red" FontSize="12" Height="auto" Margin="10"></TextBlock>
+
+        <Label Content="Название:" VerticalAlignment="Center" Grid.Row="1"></Label>
+        <TextBox Grid.Row="1"  Grid.Column="1" VerticalContentAlignment="Center" Margin="10" Padding="5" Height="auto" MinHeight="25" Text="{Binding Skill.Name, Mode=TwoWay}"></TextBox>
+        <Label Grid.Row="2" Content="Сложность:" VerticalAlignment="Center" ></Label>
+        <ComboBox Grid.Column="1" Grid.Row="2" Margin="10" Padding="5" ItemsSource="{Binding Efforts}" SelectedItem="{Binding SelectedEffort, Mode=TwoWay}"></ComboBox>
+        <Label Grid.Row="3"  Content="Вид навыка:" VerticalAlignment="Center" ></Label>
+        <ComboBox Grid.Column="1" Grid.Row="3" Margin="10" Padding="5" ItemsSource="{Binding Types}" SelectedItem="{Binding Skill.Type, Mode=TwoWay}"></ComboBox>
+        <Label Grid.Row="4"  Content="Закреплено на:" VerticalAlignment="Center" ></Label>
+        <Grid Grid.Row="4" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBox PreviewTextInput="TextBox_PreviewTextInput"  Margin="10, 10, 0, 10" Padding="5" Height="auto" MinHeight="25" Text="{Binding Skill.PercentOfCompletion, Mode=TwoWay}"></TextBox>
+            <Label Grid.Column="1" Content="%" VerticalAlignment="Center" Margin="0, 10, 10, 10"></Label>
+        </Grid>
+        <CheckBox Grid.Row="5" Content="Скрыть" VerticalAlignment="Center" HorizontalAlignment="Left" IsChecked="{Binding Skill.IsHide}" Margin="10"></CheckBox>
+
+        <DockPanel  Grid.Row="5" Grid.ColumnSpan="2" HorizontalAlignment="Right" VerticalAlignment="Bottom" >
+            <Button Content="Ок" Padding="5" Margin="10" Command="{Binding SaveSkillsCommand}"></Button>
+            <Button Content="Отмена" Padding="5" Margin="10" Command="{Binding CancelCommand}"></Button>
+        </DockPanel>
     </Grid>
 </Page>
